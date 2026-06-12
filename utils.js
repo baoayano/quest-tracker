@@ -89,11 +89,13 @@ async function trackingNewQuests() {
 }
 
 function handleQuest(channel) {
-    trackingNewQuests().then(async ({ addedQuests, removedQuests, updatedQuests }) => {
-        if (!addedQuests && !removedQuests && !updatedQuests) {
+    trackingNewQuests().then(async (data) => {
+        if (!data) {
             console.log('💔〡No quest updates found.');
             return;
         }
+
+        const { addedQuests, removedQuests, updatedQuests } = data;
 
         try {
             if (addedQuests.length > 0) {
