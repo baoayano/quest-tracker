@@ -18,10 +18,12 @@ async function getSuperProperties() {
 async function fetchQuests() {
     try {
         const superProperties = await getSuperProperties();
+
         if (!superProperties) {
             console.error('❌〡Failed to get super properties. Aborting fetchQuests.');
             return null;
         }
+
         const response = await axios.get(ENDPOINT, {
             headers: {
                 'Authorization': process.env.TOKEN,
@@ -47,7 +49,9 @@ async function trackingNewQuests() {
     try {
         if (!fs.existsSync('data.json')) {
             console.log('📖〡Initializing data.json with current quests...');
+
             const quests = await fetchQuests();
+
             if (quests) {
                 fs.writeFileSync('data.json', JSON.stringify(quests, null, 2));
             }
@@ -55,6 +59,7 @@ async function trackingNewQuests() {
             return null;
         } else {
             console.log('🤫〡Checking for quest updates: ' + new Date().toLocaleTimeString());
+            
             const data = fs.readFileSync('data.json', 'utf8');
             const oldQuests = JSON.parse(data);
             const newQuests = await fetchQuests();
