@@ -25,10 +25,6 @@ async function fetchQuests() {
         const response = await axios.get(ENDPOINT, {
             headers: {
                 'Authorization': process.env.TOKEN,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.993 Chrome/138.0.7204.251 Electron/37.6.0 Safari/537.36',
-                "x-debug-options": "bugReporterEnabled",
-                "x-discord-locale": "en-US",
-                "x-discord-timezone": "Asia/Ho_Chi_Minh",
                 "x-super-properties": superProperties,
             }
         })
