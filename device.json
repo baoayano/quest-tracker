@@ -1,0 +1,21 @@
+{
+    "os": "Windows",
+    "browser": "Firefox",
+    "device": "",
+    "system_locale": "en-US",
+    "browser_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0",
+    "browser_version": "151.0",
+    "os_version": "10",
+    "referrer": "",
+    "referring_domain": "",
+    "referrer_current": "",
+    "referring_domain_current": "",
+    "release_channel": "stable",
+    "client_build_number": 561257,
+    "client_event_source": null,
+    "has_client_mods": false,
+    "client_launch_id": "770ec81f-cfa6-4dc7-bd21-ef9dbc828041",
+    "launch_signature": "ee23698e-a3ee-449c-826a-9b34d41f647e",
+    "client_heartbeat_session_id": "ae2348be-42d2-4a95-b7d5-14ed1dd732fd",
+    "client_app_state": "unfocused"
+}
