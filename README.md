@@ -1,7 +1,8 @@
 # Discord Quest Tracker
 
-A Node.js application that tracks **Discord Quests** and sends notifications to
-a Discord channel when a quest is added, removed, or updated.
+A Discord bot built with [`discord.js`](https://discord.js.org/) that tracks
+**Discord Quests** and sends notifications to a Discord channel when a quest is
+added, removed, or updated.
 
 The application calls the Discord Quests API every minute, compares the latest
 results with the data stored in `data.json`, and sends changes as Discord
