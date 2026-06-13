@@ -51,6 +51,7 @@ TOKEN=your_discord_token
 BOT_TOKEN=your_discord_bot_token
 GUILD_ID=your_guild_id
 CHANNEL_ID=your_channel_id
+MENTION_ROLE_ID=your_mention_role_id
 ```
 
 | Variable | Description |
@@ -59,6 +60,7 @@ CHANNEL_ID=your_channel_id
 | `BOT_TOKEN` | Discord bot token used to send notifications. |
 | `GUILD_ID` | ID of the Discord server containing the notification channel. |
 | `CHANNEL_ID` | ID of the Discord channel that receives quest notifications. |
+| `MENTION_ROLE_ID` | The ID of the role in the Discord server you are using for notifications. |
 
 To obtain the server and channel IDs, enable **Developer Mode** in Discord,
 right-click the server or channel, and select **Copy ID**.

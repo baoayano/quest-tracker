@@ -101,25 +101,38 @@ function handleQuest(channel) {
         try {
             if (addedQuests.length > 0) {
                 addedQuests.forEach(q => {
-                    channel.send({ ...questEmbed(q) });
+                    const result = channel.send({ ...questEmbed(q) });
+                    mentionRole(result);
                 });
             }
 
             if (removedQuests.length > 0) {
                 removedQuests.forEach(q => {
-                    channel.send({ ...questEmbed(q, true) });
+                    const result = channel.send({ ...questEmbed(q, true) });
+                    mentionRole(result);
                 });
             }
 
             if (updatedQuests.length > 0) {
                 updatedQuests.forEach(q => {
-                    channel.send({ ...questEmbed(q, false, true) });
+                    const result = channel.send({ ...questEmbed(q, false, true) });
+                    mentionRole(result);
                 });
             }
         } catch (error) {
             console.error('❌〡Error handling quests:', error);
         }
     })
+}
+
+function mentionRole(msg) {
+    if (!process.env.MENTION_ROLE_ID) return;
+    const roleId = process.env.MENTION_ROLE_ID;
+    msg.then(sentMsg => {
+        sentMsg.reply({ content: `<@&${roleId}>`, allowedMentions: { roles: [roleId] } });
+    }).catch(err => {
+        console.error('❌〡Error mentioning role:', err);
+    });
 }
 
 function getQuestType(quest) {
@@ -154,10 +167,6 @@ function questEmbed(quest, isRemoved = false, isUpdated = false) {
                 inline: true
             },
             {
-                name: '\t',
-                value: '\t',
-            },
-            {
                 name: 'Publisher',
                 value: quest.config.messages.game_publisher,
                 inline: true
@@ -166,10 +175,6 @@ function questEmbed(quest, isRemoved = false, isUpdated = false) {
                 name: 'Rewards',
                 value: quest.config.rewards_config.rewards.map(r => r.messages.name).join(', '),
                 inline: true
-            },
-            {
-                name: '\t',
-                value: '\t',
             },
             {
                 name: 'Start Date',
@@ -182,6 +187,7 @@ function questEmbed(quest, isRemoved = false, isUpdated = false) {
                 inline: true
             }
         )
+        .setDescription(isRemoved ? `This quest has been deleted.` : isUpdated ? `This quest has been updated.\n\n*If you can't see the quest in the Discord app, first try restarting Discord. If the quest still doesn't appear, try using a US, UK, or another supported IP address. We will post an announcement around noon whenever a quest has specific IP requirements (if applicable).*` : `A new quest has been added!\n\n*If you can't see the quest in the Discord app, first try restarting Discord. If the quest still doesn't appear, try using a US, UK, or another supported IP address. We will post an announcement around noon whenever a quest has specific IP requirements (if applicable).*`)
         .setImage(`https://cdn.discordapp.com/${quest.config.assets.hero}`)
         .setThumbnail("https://cdn3.emoji.gg/emojis/66366-completed-a-quest.png")
         .setFooter({ text: `ID: ${quest.id} | Status: ${isRemoved ? 'Deleted' : isUpdated ? 'Updated' : 'New'}` })
@@ -203,5 +209,6 @@ function discordTimestamp(date) {
 }
 
 module.exports = {
-    handleQuest
+    handleQuest,
+    getSuperProperties,
 }
