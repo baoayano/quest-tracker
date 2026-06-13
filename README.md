@@ -5,8 +5,8 @@ A Discord bot built with [`discord.js`](https://discord.js.org/) that tracks
 added, removed, or updated.
 
 The application calls the Discord Quests API every minute, compares the latest
-results with the data stored in `data.json`, and sends changes as Discord
-embeds.
+available and region-excluded quests with the snapshots stored in `data.json`
+and `excluded_data.json`, and sends changes as Discord embeds.
 
 ## Features
 
@@ -14,9 +14,14 @@ embeds.
 - Detects newly added quests.
 - Detects removed or expired quests.
 - Detects changes to start times, expiration times, and rewards.
-- Displays the game title, quest type, publisher, rewards, dates, and artwork
+- Tracks quests excluded from the current account's region and identifies them
+  in notifications.
+- Fetches full quest details by ID when an excluded quest enters or leaves the
+  excluded quest list.
+- Displays the quest title, quest type, publisher, rewards, dates, and cover
   in Discord embeds.
-- Stores the latest quest state in `data.json`.
+- Stores available and excluded quest snapshots separately in `data.json` and
+  `excluded_data.json`.
 
 ## Requirements
 
@@ -74,9 +79,9 @@ node app.js
 After the bot logs in successfully, the application checks for quests
 immediately and continues checking every minute.
 
-On the first run, if `data.json` does not exist, the application stores the
-current quest list as its initial state. Change notifications are sent from
-subsequent checks.
+On the first run, or when either snapshot file is missing, the application
+stores the current available quests in `data.json` and region-excluded quests
+in `excluded_data.json`. Change notifications are sent from subsequent checks.
 
 ## How It Works
 
@@ -84,15 +89,23 @@ subsequent checks.
    channel.
 2. `utils.js` reads `device.json`, encodes it as `x-super-properties`, and calls
    the Discord Quests API.
-3. The latest quest list is compared with the state stored in `data.json`.
-4. Added, removed, and updated quests are sent to the Discord channel.
-5. `data.json` is overwritten with the latest state.
+3. Available quests are compared with `data.json`, while region-excluded
+   quests are compared with `excluded_data.json`.
+4. Added, removed, and updated available quests are sent to the Discord
+   channel.
+5. When a quest enters or leaves the excluded list, the bot fetches its full
+   details from the quest-by-ID endpoint and sends an embed that marks it as
+   unavailable in the current region.
+6. Both snapshot files are overwritten with the latest state.
 
 A quest is considered updated when any of the following values change:
 
 - Start time.
 - Expiration time.
 - Reward list.
+
+Updated excluded quests cannot be detected because the excluded quest list
+does not include full quest configuration data.
 
 ## Project Structure
 
@@ -101,7 +114,8 @@ quest_tracker/
 ├── app.js          # Initializes the bot and schedules quest checks
 ├── utils.js        # Calls the API, compares data, and creates Discord embeds
 ├── device.json     # Client information used for x-super-properties
-├── data.json       # Latest stored quest state
+├── data.json       # Latest available quest state
+├── excluded_data.json # Latest region-excluded quest state
 ├── .env.example    # Environment variable configuration template
 └── package.json    # Project dependencies
 ```
@@ -125,7 +139,8 @@ For example, use `5 * 60 * 1000` to check every five minutes.
   and `Embed Links` permissions in the notification channel.
 - **Quests API request fails:** verify `TOKEN`, the network connection, and the
   contents of `device.json`.
-- **Reset the initial state:** delete `data.json` and restart the application.
+- **Reset the initial state:** delete both `data.json` and
+  `excluded_data.json`, then restart the application.
 
 ## Security and Important Notes
 

@@ -1,4 +1,5 @@
 data.json
+excluded_data.json
 node_modules/
 dist/
 .env
